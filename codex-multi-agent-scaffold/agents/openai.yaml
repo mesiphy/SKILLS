@@ -1,0 +1,3 @@
+display_name: Codex Multi-Agent Scaffold
+short_description: File-driven multi-agent development workflow for Codex projects.
+default_prompt: Initialize or manage a .ai multi-agent scaffold for this project, using active/archive/handoff structure and strict role-based status flow.
