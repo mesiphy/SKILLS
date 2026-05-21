@@ -1,8 +1,20 @@
 # 001-fix-01 - Fix Task / 返工任务
 
+## Fix Task File / 返工任务文件
+
+- `.ai/active/current-task/001-fix-01-task.md`
+
 ## Fix Goal / 返工目标
 
 TODO
+
+## Original Task / 原任务
+
+- `.ai/active/current-task/001-task.md`
+
+## Original Dev Log / 原 dev-log
+
+- `.ai/active/dev-log/001-dev-log.md`
 
 ## Trigger Review / 触发返工的 review
 
@@ -16,6 +28,7 @@ TODO
 
 - TODO
 - `.ai/active/dev-log/001-fix-01-dev-log.md`
+- `.ai/active/status.json`
 - `.ai/active/status.md`
 
 ## Forbidden Scope / 禁止修改范围
@@ -37,4 +50,6 @@ TODO
 ## Required Outputs / 输出要求
 
 - `.ai/active/dev-log/001-fix-01-dev-log.md`
+- 更新 `.ai/active/status.json`
+- 更新 `.ai/active/status.md`
 - 等待重新 review

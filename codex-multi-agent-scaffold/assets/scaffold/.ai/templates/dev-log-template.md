@@ -50,3 +50,9 @@ TODO
 
 - `git status` 摘要：TODO
 - 相关 diff 摘要：TODO
+
+## 12. Task Scope Validation / 任务范围校验
+
+- 命令：`python scripts/validate_task_scope.py --target . --task .ai/active/current-task/001-task.md`
+- 结果：TODO
+- 越界文件：无 / TODO

@@ -1,31 +1,121 @@
 # Project Context / 项目上下文
 
-复制本模板到 `.ai/project-context.md` 后填写。
+Copy this template to `.ai/project-context.md` only when resetting project context.
 
-## Project Goal / 项目目标
+Rules:
 
-TODO
+1. Record verified facts only.
+2. Do not write assumptions as facts.
+3. Put unverified information in `Unknowns`.
+4. Include evidence for every key judgment when possible.
+5. Do not record development goals here.
+6. Do not record temporary task status here.
 
-## Tech Stack / 技术栈
+## Project Summary
 
-TODO
+- Project name:
+- Product or system purpose:
+- Evidence:
 
-## Directory Map / 目录结构
+## Verified Tech Stack
 
-TODO
+| Area | Verified fact | Evidence |
+|---|---|---|
+| Primary language | Unknown | Not verified |
+| Frontend | Unknown | Not verified |
+| Backend | Unknown | Not verified |
+| Runtime | Unknown | Not verified |
+| Package manager | Unknown | Not verified |
+| Database / storage | Unknown | Not verified |
+| Testing | Unknown | Not verified |
+| Deployment | Unknown | Not verified |
 
-## Architecture Constraints / 架构约束
+## Verified Directory Structure
 
-TODO
+```text
+Unknown until repo scan is complete.
+```
 
-## Test Commands / 测试命令
+Evidence:
 
-TODO
+- None recorded
 
-## Risk Areas / 风险区域
+## Verified Entry Points
 
-TODO
+| Type | Path | Evidence |
+|---|---|---|
+| Backend entry | Unknown | Not verified |
+| Frontend entry | Unknown | Not verified |
+| CLI / worker entry | Unknown | Not verified |
 
-## Do Not Do / 禁止事项
+## Verified Commands
 
-TODO
+### Install
+
+```bash
+# Unknown
+```
+
+### Test
+
+```bash
+# Unknown
+```
+
+### Build
+
+```bash
+# Unknown
+```
+
+### Lint / Typecheck
+
+```bash
+# Unknown
+```
+
+## Verified Database / Storage
+
+- Unknown
+- Evidence:
+
+## Verified API Structure
+
+- Unknown
+- Evidence:
+
+## Verified Testing Setup
+
+- Unknown
+- Evidence:
+
+## Verified Coding Conventions
+
+- Unknown
+- Evidence:
+
+## High Risk Areas
+
+- Unknown
+
+## Unknowns
+
+- Project purpose
+- Primary language
+- Frameworks
+- Runtime
+- Package manager
+- Database / storage
+- Entry points
+- Test commands
+- Build commands
+- Lint / typecheck commands
+- API structure
+- Coding conventions
+- High risk areas
+
+## Evidence Index
+
+| Evidence | Supports | Notes |
+|---|---|---|
+| None recorded | None | Run repo scan first |

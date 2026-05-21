@@ -8,14 +8,17 @@ TODO
 
 - `.ai/rules.md`
 - `.ai/project-context.md`
+- `.ai/project-specific-rules.md`
 - `.ai/handoff/latest-summary.md`
 - `.ai/active/action-plan.md`
+- `.ai/active/status.json`
 - `.ai/active/status.md`
 
 ## Allowed Scope / 允许修改范围
 
 - TODO
 - `.ai/active/dev-log/001-dev-log.md`
+- `.ai/active/status.json`，仅允许按当前 agent 权限更新状态和路径
 - `.ai/active/status.md`，仅允许按当前 agent 权限更新状态和路径
 
 ## Forbidden Scope / 禁止修改范围
@@ -38,6 +41,7 @@ TODO
 ## Required Outputs / 输出要求
 
 - 创建 `.ai/active/dev-log/001-dev-log.md`。
+- 更新 `.ai/active/status.json`。
 - 更新 `.ai/active/status.md`。
 - 不创建 review。
 - 不进入下一任务。

@@ -7,7 +7,7 @@
 开发与审查时按以下优先级解释冲突：
 
 ```text
-rules.md > active/status.md > active/current-task/*.md > active/action-plan.md > project-context.md > handoff/latest-summary.md
+rules.md > active/status.json > active/status.md > active/current-task/*.md > active/action-plan.md > project-specific-rules.md > project-context.md > handoff/latest-summary.md
 ```
 
 如果冲突无法判断，必须暂停并记录阻塞原因。
@@ -21,6 +21,27 @@ rules.md > active/status.md > active/current-task/*.md > active/action-plan.md >
 - 新阶段规划只能基于 `project-context.md`、`handoff/latest-summary.md` 和用户目标。
 
 ## 3. State Machine / 状态机
+
+`.ai/active/status.json` 是机器可读状态源，`.ai/active/status.md` 是人类可读状态镜像。任何 agent 修改状态时必须同步更新两个文件。
+
+如果 `status.md` 与 `status.json` 冲突，必须暂停并输出 `FAIL`，不得继续推进任务。
+
+`status.json` 必须使用以下字段：
+
+```json
+{
+  "phase": "planning",
+  "current_task_id": null,
+  "current_task_file": null,
+  "task_status": "pending",
+  "dev_log_file": null,
+  "review_file": null,
+  "last_human_confirmation": null,
+  "tasks": [],
+  "blocked_reason": null,
+  "updated_at": null
+}
+```
 
 允许的流程阶段：
 
@@ -54,6 +75,21 @@ planning/pending -> ready/pending -> developing/in-progress -> reviewing/done ->
 ```text
 reviewing/done -> fixing/review-failed -> fixing/pending -> developing/in-progress -> reviewing/done
 ```
+
+人工确认规则：
+
+- `last_human_confirmation` 只能在用户明确确认后写入。
+- 模糊回复、沉默、自动推断都不能作为确认。
+- flow-control agent 只有在 `task_status = review-pass` 且存在明确人工确认时才能推进下一任务。
+
+状态文件引用规则：
+
+- `current_task_file` 非空时必须指向 `.ai/active/current-task/` 下存在的任务文件。
+- `dev_log_file` 非空时必须指向 `.ai/active/dev-log/` 下存在的 dev-log 文件。
+- `review_file` 非空时必须指向 `.ai/active/review/` 下存在的 review 文件。
+- `review-pass` 状态必须有 review 文件。
+- `review-failed` 状态必须创建或等待创建 fix task。
+- `completed` 状态必须有 `.ai/active/final-report.md`。
 
 ## 4. Role Permissions / 角色权限
 
@@ -135,7 +171,33 @@ reviewing/done -> fixing/review-failed -> fixing/pending -> developing/in-progre
 - 可并行执行。
 - 不得修改文件，不得更新 status。
 
-## 5. Task Scope / 任务范围
+## 5. File Naming Rules / 文件命名规则
+
+### Normal Task / 普通任务
+
+- Task: `.ai/active/current-task/{task_id}-task.md`
+- Dev log: `.ai/active/dev-log/{task_id}-dev-log.md`
+- Review: `.ai/active/review/{task_id}-review.md`
+
+Examples:
+
+- `.ai/active/current-task/001-task.md`
+- `.ai/active/dev-log/001-dev-log.md`
+- `.ai/active/review/001-review.md`
+
+### Fix Task / 返工任务
+
+- Fix task: `.ai/active/current-task/{task_id}-fix-{fix_index}-task.md`
+- Fix dev log: `.ai/active/dev-log/{task_id}-fix-{fix_index}-dev-log.md`
+- Fix review: `.ai/active/review/{task_id}-fix-{fix_index}-review.md`
+
+Examples:
+
+- `.ai/active/current-task/001-fix-01-task.md`
+- `.ai/active/dev-log/001-fix-01-dev-log.md`
+- `.ai/active/review/001-fix-01-review.md`
+
+## 6. Task Scope / 任务范围
 
 每个 task 必须声明：
 
@@ -146,7 +208,7 @@ reviewing/done -> fixing/review-failed -> fixing/pending -> developing/in-progre
 
 开发 agent 只能修改允许范围内的文件。若必须越界，必须在 dev-log 中标记 `scope-exception`，说明原因和不修改的后果。
 
-## 6. Dev Log Rules / 开发记录规则
+## 7. Dev Log Rules / 开发记录规则
 
 每个任务必须有对应 dev-log。dev-log 只能记录事实，必须包含：
 
@@ -162,7 +224,7 @@ reviewing/done -> fixing/review-failed -> fixing/pending -> developing/in-progre
 
 禁止把未验证事项标记为 passed。
 
-## 7. Review Rules / 审查规则
+## 8. Review Rules / 审查规则
 
 review 结论只能是：
 
@@ -179,14 +241,14 @@ review 结论只能是：
 - 验收项是否有证据
 - 测试失败或未运行是否说明原因
 
-## 8. Git Rules / Git 规则
+## 9. Git Rules / Git 规则
 
 - 默认不自动 commit。
 - 每个开发和审查记录应包含相关 `git status` 或 diff 摘要。
 - 不得执行 destructive git 操作，除非用户明确要求。
 - 不得重置用户已有改动。
 
-## 9. Phase Archive / 阶段归档
+## 10. Phase Archive / 阶段归档
 
 阶段完成后：
 

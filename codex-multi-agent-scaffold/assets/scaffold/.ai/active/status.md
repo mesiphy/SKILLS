@@ -1,6 +1,8 @@
 # AI Development Status / AI 开发状态
 
-本文档是当前阶段的唯一运行状态。所有 agent 必须先读取 `.ai/rules.md`，再读取本文档。
+本文档是当前阶段的人类可读运行状态。机器可读状态以 `.ai/active/status.json` 为准。
+
+所有 agent 必须先读取 `.ai/rules.md`，再读取 `.ai/active/status.json`，最后读取本文档。如果本文档与 `status.json` 冲突，必须暂停并运行状态校验。
 
 ## 1. Current Goal / 当前目标
 
@@ -42,16 +44,16 @@ YYYY-MM-DD HH:mm Timezone
 
 ### Task ID / 当前任务编号
 
-`001`
+`未创建`
 
 ### Task Name / 当前任务名称
 
-`TODO`
+`未创建`
 
 ### Task File / 当前任务文件
 
 ```text
-.ai/active/current-task/001-task.md
+未创建
 ```
 
 ### Current Dev Log / 当前 dev-log
@@ -74,7 +76,7 @@ YYYY-MM-DD HH:mm Timezone
 
 | 编号 | 任务文件 | 任务名称 | 依赖 | 状态 | dev-log | review | 备注 |
 |---|---|---|---|---|---|---|---|
-| 001 | `.ai/active/current-task/001-task.md` | TODO | 无 | `pending` | 未创建 | 未创建 | 当前任务 |
+| 无 | 无 | 无 | 无 | `pending` | 未创建 | 未创建 | 等待 plan mode 生成任务 |
 
 ## 5. Fix Records / 返工记录
 

@@ -17,6 +17,8 @@
 
 ## 4. File Change Check / 文件修改检查
 
+- scope 校验命令：`python scripts/validate_task_scope.py --target . --task .ai/active/current-task/001-task.md`
+
 | 文件 | 是否在允许范围 | 结论 |
 |---|---|---|
 | TODO | yes/no | TODO |

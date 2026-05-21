@@ -1,0 +1,12 @@
+{
+  "phase": "planning",
+  "current_task_id": null,
+  "current_task_file": null,
+  "task_status": "pending",
+  "dev_log_file": null,
+  "review_file": null,
+  "last_human_confirmation": null,
+  "tasks": [],
+  "blocked_reason": null,
+  "updated_at": null
+}
