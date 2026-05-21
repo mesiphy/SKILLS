@@ -16,12 +16,12 @@ This skill is a multi-agent workflow generator, project adapter, and state valid
 It must help an agent:
 
 1. Detect the target project root.
-2. Create or update the project `.ai/` scaffold.
+2. Create or update the project `AGENTS.md`, `.codex/agents/`, and `.ai/` scaffold.
 3. Scan the target repository.
 4. Generate verified `project-context.md` from real project evidence.
 5. Generate project-specific rules from verified repository facts.
 6. Initialize `active/action-plan.md`, `active/status.md`, `active/status.json`, and `active/current-task/*.md` when a development goal is provided.
-7. Validate `.ai/` structure and state before work proceeds.
+7. Validate Codex entrypoints, agent configs, `.ai/` structure, and state before work proceeds.
 8. Report initialization results, risks, unknowns, and next usage steps.
 
 The workflow separates current execution state from historical records:
@@ -46,14 +46,14 @@ Before taking action, determine the current mode from the user's request and rep
 
 ## Init Mode
 
-Enter init mode when the user asks to initialize a multi-agent scaffold, create a `.ai/` folder, or make the current project support the workflow.
+Enter init mode when the user asks to initialize a multi-agent scaffold, create Codex workflow entrypoints, or make the current project support the workflow.
 
 Required behavior:
 
 1. Detect whether the current working directory is the target project root. Use repository evidence such as `.git/`, `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, README files, source directories, or user-provided paths.
 2. Check whether `.ai/` already exists.
-3. If `.ai/` does not exist, copy `assets/scaffold/.ai/` into the target project root.
-4. If `.ai/` exists, update conservatively: do not overwrite user content unless the user explicitly requests force behavior.
+3. If workflow files do not exist, copy `assets/scaffold/` into the target project root so `AGENTS.md`, `.codex/agents/`, and `.ai/` are installed together.
+4. If workflow files already exist, update conservatively: do not overwrite user content unless the user explicitly requests force behavior.
 5. Scan the project and generate `.ai/repo-scan-report.md`.
 6. Update `.ai/project-context.md` from verified facts in the scan report.
 7. Generate `.ai/project-specific-rules.md` from verified project type, structure, commands, and risks.
@@ -71,6 +71,31 @@ python scripts/validate_ai_state.py --target /path/to/project
 ```
 
 Init mode must not modify business code.
+
+## Mandatory Outputs
+
+When initializing or upgrading a repository, this skill must create or update:
+
+1. `AGENTS.md`
+2. `.codex/agents/orchestrator.toml`
+3. `.codex/agents/planner.toml`
+4. `.codex/agents/explorer.toml`
+5. `.codex/agents/developer.toml`
+6. `.codex/agents/reviewer.toml`
+7. `.codex/agents/flow-controller.toml`
+8. `.codex/agents/fix-planner.toml`
+9. `.ai/rules.md`
+10. `.ai/project-context.md`
+11. `.ai/project-specific-rules.md`
+12. `.ai/repo-scan-report.md`
+13. `.ai/workflow-config.yaml`
+14. `.ai/active/status.json`
+15. `.ai/active/status.md`
+16. `.ai/active/action-plan.md`
+17. `.ai/templates/*`
+18. `.ai/scripts/*`
+
+Do not overwrite active logs, reviews, archive records, or user project files during conservative upgrades.
 
 ## Plan Mode
 
@@ -127,12 +152,13 @@ Required checks:
 10. `status.json.dev_log_file` exists when set.
 11. `status.json.review_file` exists when set.
 12. `phase` and `task_status` values belong to legal enums.
-13. Review-pass state has a review file.
-14. Review-failed state has or requires a fix task.
-15. Completed state has `active/final-report.md`.
-16. `active/`, `archive/`, and `handoff/` directories exist.
-17. `status.md` and `status.json` do not conflict.
-18. No illegal task state conflict exists.
+13. Codex entry files exist: `AGENTS.md`, `.codex/agents/*.toml`, `.ai/scripts/*.py`, and `.ai/workflow-config.yaml`.
+14. Review-pass state has a review file.
+15. Review-failed state has or requires a fix task.
+16. Completed state has `active/final-report.md`.
+17. `active/`, `archive/`, and `handoff/` directories exist.
+18. `status.md` and `status.json` do not conflict.
+19. No illegal task state conflict exists.
 
 Use this script when available:
 
@@ -159,7 +185,7 @@ Validation output must clearly separate `PASS`, `WARN`, and `FAIL`, and include 
 - Never let multiple development agents implement different sequential tasks in parallel.
 - Default to no automatic git commit.
 - Pause after each review, even if review passed.
-- Treat `rules.md > active/status.json > active/status.md > active/current-task > active/action-plan.md > project-specific-rules.md > project-context.md` as priority order.
+- Treat `AGENTS.md > rules.md > active/status.json > active/status.md > active/current-task > active/action-plan.md > project-specific-rules.md > project-context.md` as priority order.
 - If a command, test, or build fails, record the failure instead of hiding it.
 - If the agent must touch files outside the allowed task scope, stop and request user confirmation unless the task explicitly allows the change.
 - Do not write assumptions as facts in `project-context.md` or `project-specific-rules.md`; unknown information belongs in an `Unknowns` section.
@@ -171,10 +197,10 @@ Validation output must clearly separate `PASS`, `WARN`, and `FAIL`, and include 
 The reusable file scaffold lives at:
 
 ```text
-assets/scaffold/.ai/
+assets/scaffold/
 ```
 
-It contains rules, templates, prompts, active/archive/handoff directories, and starter documents.
+It contains `AGENTS.md`, `.codex/agents/`, `.ai/rules.md`, templates, prompts, scripts, active/archive/handoff directories, and starter documents.
 
 Deterministic helper scripts live in:
 

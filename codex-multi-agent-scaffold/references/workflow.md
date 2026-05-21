@@ -6,7 +6,7 @@
 planning / pending
   -> ready / pending
   -> developing / in-progress
-  -> reviewing / done
+  -> reviewing / dev-done
   -> paused / review-pass
   -> ready / pending
   -> completed / review-pass
@@ -15,11 +15,11 @@ planning / pending
 Failure flow:
 
 ```text
-reviewing / done
+reviewing / dev-done
   -> fixing / review-failed
   -> fixing / pending
   -> developing / in-progress
-  -> reviewing / done
+  -> reviewing / dev-done
 ```
 
 ## Default read set for a new phase

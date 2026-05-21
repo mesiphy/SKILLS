@@ -38,7 +38,7 @@ YYYY-MM-DD HH:mm Timezone
 
 ### Last Updated By / 最近更新者
 
-`planning-agent`
+`workflow-script`
 
 ## 3. Current Task / 当前任务
 

@@ -44,7 +44,7 @@
 - 普通任务示例：`.ai/active/dev-log/001-dev-log.md`。
 - 返工任务示例：`.ai/active/dev-log/001-fix-01-dev-log.md`。
 - 更新 `status.json.phase = "reviewing"`。
-- 更新 `status.json.task_status = "done"`。
+- 更新 `status.json.task_status = "dev-done"`。
 - 更新 `status.json.dev_log_file`。
 - 同步更新 `status.md`。
 - 运行或等价执行：

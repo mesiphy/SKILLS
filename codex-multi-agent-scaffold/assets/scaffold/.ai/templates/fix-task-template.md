@@ -41,7 +41,7 @@ TODO
 1. TODO
 2. 运行验证命令。
 3. 创建返工 dev-log。
-4. 更新 status 为 reviewing/done。
+4. 更新 status 为 reviewing/dev-done。
 
 ## Acceptance Criteria / 返工验收标准
 

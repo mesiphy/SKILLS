@@ -1,14 +1,14 @@
 # Codex Multi-Agent Scaffold
 
-`codex-multi-agent-scaffold` is a Codex skill for turning a software project into a file-driven multi-agent workflow.
+`codex-multi-agent-scaffold` is a Codex skill for turning a software project into a Codex-native, file-driven multi-agent workflow.
 
 It is no longer only a `.ai/` template. It is designed to act as:
 
-- a multi-agent workflow generator
+- a Codex-native multi-agent workflow generator
 - a project-specific adapter
 - a state validator
 
-The skill helps Codex initialize `.ai/`, scan the repository, generate verified project context, create project-specific rules, plan work, execute one task at a time, review changes, control flow, and archive completed phases.
+The skill helps Codex install `AGENTS.md`, `.codex/agents/`, and `.ai/`; scan the repository; generate verified project context; create project-specific rules; plan work; execute one task at a time; review changes; control flow; and archive completed phases.
 
 ## Good Fits
 
@@ -30,7 +30,8 @@ In your target project root, ask Codex:
 
 ```text
 Use the codex-multi-agent-scaffold skill to initialize this project.
-Scan the repository, create the .ai scaffold, generate project-context.md,
+Create AGENTS.md, .codex/agents, and the .ai workflow files.
+Scan the repository, generate project-context.md, repo-scan-report.md,
 project-specific-rules.md, status.md, status.json, and validate the result.
 Do not modify business code.
 ```
@@ -54,19 +55,34 @@ Follow .ai/active/status.json and the current-task file.
 
 ## Initialization
 
-Initialization creates or updates the target project's `.ai/` directory.
+Initialization creates or updates the target project's Codex workflow entrypoints.
 
 Expected generated files include:
 
+- `AGENTS.md`
+- `.codex/agents/orchestrator.toml`
+- `.codex/agents/planner.toml`
+- `.codex/agents/explorer.toml`
+- `.codex/agents/developer.toml`
+- `.codex/agents/reviewer.toml`
+- `.codex/agents/flow-controller.toml`
+- `.codex/agents/fix-planner.toml`
 - `.ai/repo-scan-report.md`
+- `.ai/workflow-config.yaml`
 - `.ai/project-context.md`
 - `.ai/project-specific-rules.md`
 - `.ai/active/status.md`
 - `.ai/active/status.json`
 - `.ai/active/action-plan.md`
 - `.ai/active/current-task/*.md` when a development goal is provided
+- `.ai/scripts/validate_state.py`
+- `.ai/scripts/sync_status_md.py`
+- `.ai/scripts/next_task.py`
+- `.ai/scripts/create_fix_task.py`
+- `.ai/scripts/summarize_handoff.py`
+- `.ai/scripts/archive_phase.py`
 
-The initializer should not overwrite existing `.ai/` content unless you explicitly request force behavior.
+The initializer should not overwrite existing workflow content unless you explicitly request force behavior.
 
 You can also run the helper script directly from this skill directory:
 
@@ -74,6 +90,38 @@ You can also run the helper script directly from this skill directory:
 python scripts/init_scaffold.py --target /path/to/project
 python scripts/scan_project.py --target /path/to/project
 python scripts/validate_ai_state.py --target /path/to/project
+```
+
+## Four Common Scenarios
+
+Initialize a project:
+
+```text
+Use codex-multi-agent-scaffold to initialize the current project.
+Create AGENTS.md, .codex/agents, and .ai workflow files.
+Scan the repository and generate initial project context and status.
+```
+
+Generate a plan:
+
+```text
+Use planner mode for the goal "...".
+Generate action-plan.md, status.json, status.md, and current-task/*.md.
+Stop after planning.
+```
+
+Continue the current task:
+
+```text
+Use orchestrator mode to continue from .ai/active/status.json.
+Advance at most one task, pause after review, and do not commit.
+```
+
+Archive a completed phase:
+
+```text
+Use phase-close mode to verify completion, generate final-report.md,
+update handoff/latest-summary.md, and run archive_phase.py.
 ```
 
 ## Planning
@@ -137,6 +185,8 @@ Review conclusions map to task status:
 - `failed` -> `review-failed`
 - `need-human-review` -> `need-human-review`
 
+Development-complete-but-not-reviewed state is `dev-done`, not `done`.
+
 ## Advancing To The Next Task
 
 After a passing review, confirm explicitly:
@@ -199,8 +249,8 @@ Report PASS, WARN, FAIL, and suggested fixes.
 Direct script:
 
 ```bash
-python scripts/validate_ai_state.py --target /path/to/project
-python scripts/validate_ai_state.py --target /path/to/project --strict
+python .ai/scripts/validate_state.py --target /path/to/project
+python .ai/scripts/sync_status_md.py --target /path/to/project --check
 ```
 
 To validate development scope:
@@ -215,6 +265,7 @@ Key scaffold files:
 
 - `.ai/rules.md`
 - `.ai/repo-scan-report.md`
+- `.ai/workflow-config.yaml`
 - `.ai/project-context.md`
 - `.ai/project-specific-rules.md`
 - `.ai/active/action-plan.md`
@@ -227,6 +278,9 @@ Key scaffold files:
 - `.ai/handoff/latest-summary.md`
 - `.ai/templates/`
 - `.ai/prompts/`
+- `.ai/scripts/`
+- `.codex/agents/`
+- `AGENTS.md`
 
 ## Naming Rules
 
@@ -246,7 +300,7 @@ Fix task:
 
 ### Does init mode modify business code?
 
-No. Init mode should only create or update `.ai/` workflow files.
+No. Init mode should only create or update workflow files such as `AGENTS.md`, `.codex/agents/`, and `.ai/`.
 
 ### What is the source of truth for state?
 
@@ -268,6 +322,6 @@ Not on sequential tasks. Explorer agents may run in parallel because they are re
 
 - The helper scripts initialize, scan, and validate state, but they do not run a full autonomous orchestrator.
 - `project-context.md` and `project-specific-rules.md` still require agent judgment to turn scan evidence into clean prose.
-- `status.md` and `status.json` synchronization is enforced by rules and validation, not by a centralized state-writing API.
+- `status.md` can be regenerated from `status.json` with `.ai/scripts/sync_status_md.py`.
 - Scope validation depends on clear allowed scope entries in each task file.
 - Complex monorepos may need manual project-root and command clarification.

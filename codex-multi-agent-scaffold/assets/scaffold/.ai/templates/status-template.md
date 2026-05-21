@@ -34,7 +34,7 @@
 
 - `pending`
 - `in-progress`
-- `done`
+- `dev-done`
 - `review-pass`
 - `review-failed`
 - `need-human-review`

@@ -80,7 +80,7 @@
 - 不得修改业务代码。
 - 不得创建 dev-log。
 - 不得创建 review。
-- 不得把任何任务标记为 done、review-pass 或 completed。
+- 不得把任何任务标记为 dev-done、review-pass 或 completed。
 - 不得自动进入 development。
 - 不得自动 commit。
 

@@ -58,7 +58,7 @@ rules.md > active/status.json > active/status.md > active/current-task/*.md > ac
 
 - `pending`
 - `in-progress`
-- `done`
+- `dev-done`
 - `review-pass`
 - `review-failed`
 - `need-human-review`
@@ -67,13 +67,13 @@ rules.md > active/status.json > active/status.md > active/current-task/*.md > ac
 正常流转：
 
 ```text
-planning/pending -> ready/pending -> developing/in-progress -> reviewing/done -> paused/review-pass -> ready/pending -> completed/review-pass
+planning/pending -> ready/pending -> developing/in-progress -> reviewing/dev-done -> paused/review-pass -> ready/pending -> completed/review-pass
 ```
 
 失败流转：
 
 ```text
-reviewing/done -> fixing/review-failed -> fixing/pending -> developing/in-progress -> reviewing/done
+reviewing/dev-done -> fixing/review-failed -> fixing/pending -> developing/in-progress -> reviewing/dev-done
 ```
 
 人工确认规则：
@@ -111,7 +111,7 @@ reviewing/done -> fixing/review-failed -> fixing/pending -> developing/in-progre
 
 - 修改业务代码
 - 创建 dev-log 或 review
-- 将任务标记为 done 或 review-pass
+- 将任务标记为 dev-done 或 review-pass
 
 ### Development agent / 开发 agent
 
@@ -120,7 +120,7 @@ reviewing/done -> fixing/review-failed -> fixing/pending -> developing/in-progre
 - 将当前任务从 `pending` 改为 `in-progress`
 - 修改当前 task 允许范围内的文件
 - 创建对应 dev-log
-- 将当前任务改为 `done`
+- 将当前任务改为 `dev-done`
 
 不得：
 

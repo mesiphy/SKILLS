@@ -31,7 +31,7 @@
 - `phase = planning` 且缺少项目上下文：调用 explorer agent 或 init scaffold agent 补充上下文。
 - `phase = ready` 且 `task_status = pending`：只有用户明确要求执行时，调用 development agent。
 - `phase = developing` 且 `task_status = in-progress`：继续 development agent；可并行调用只读 explorer。
-- `phase = reviewing` 且 `task_status = done`：调用 review agent。
+- `phase = reviewing` 且 `task_status = dev-done`：调用 review agent。
 - `task_status = review-pass`：暂停，等待用户明确确认；确认后调用 flow-control agent。
 - `task_status = review-failed`：调用 fix-planning agent。
 - `task_status = need-human-review`：停止并汇报需要用户判断的问题。

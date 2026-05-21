@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Initialize or update a project's .ai multi-agent scaffold."""
+"""Initialize or update a project's Codex multi-agent scaffold."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Iterable
 
 
-SKIP_NAMES = {".DS_Store"}
+SKIP_NAMES = {".DS_Store", "__pycache__"}
 
 
 @dataclass
@@ -63,6 +63,9 @@ def iter_scaffold_files(source: Path) -> Iterable[Path]:
 
 
 def ensure_directory(path: Path, result: InitResult, target_root: Path) -> None:
+    if path.exists() and not path.is_dir():
+        result.errors.append(f"Target path exists but is not a directory: {rel(path, target_root)}")
+        return
     if path.exists():
         result.skipped.append(rel(path, target_root))
         return
@@ -91,9 +94,8 @@ def copy_file(source: Path, dest: Path, result: InitResult, target_root: Path) -
 
 def initialize_scaffold(target: Path, force: bool, dry_run: bool) -> InitResult:
     root = skill_root()
-    source = root / "assets" / "scaffold" / ".ai"
+    source = root / "assets" / "scaffold"
     target = target.resolve()
-    dest_root = target / ".ai"
 
     result = InitResult(
         target=target.as_posix(),
@@ -114,13 +116,9 @@ def initialize_scaffold(target: Path, force: bool, dry_run: bool) -> InitResult:
         result.errors.append(f"Target path is not a directory: {target}")
         return result
 
-    if dest_root.exists() and not dest_root.is_dir():
-        result.errors.append(f"Target .ai path exists but is not a directory: {dest_root}")
-        return result
-
     for source_path in iter_scaffold_files(source):
         relative = source_path.relative_to(source)
-        dest_path = dest_root / relative
+        dest_path = target / relative
 
         if source_path.is_dir():
             ensure_directory(dest_path, result, target)
@@ -161,7 +159,7 @@ def render_markdown(result: InitResult) -> str:
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Initialize or update a target project's .ai scaffold."
+        description="Initialize or update a target project's Codex multi-agent scaffold."
     )
     parser.add_argument(
         "--target",
